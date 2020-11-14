@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="icon" type="image/png" href="/favicon.png"/>
+        <title>International Freddo Index</title>
+        <style>
+        h1 {
+            font-family: Calibri;
+            font-weight: bold;
+            font-size: 50px;
+            text-align: center;
+            color: white;
+        }
+        .parent { 
+            display: flex; 
+            width: 100%;
+        }
+        iframe{ 
+            justify-content: center;
+            width: 400px;
+            height: 220px;
+            background-color: white;
+            margin-left: calc(50% - 200px);
+            border: none;
+        }
+        body {
+            background-color: #4b1a73;
+        }
+        label {
+            font-family: arial;
+            font-size: 13px;
+            font-weight: bold;
+            color: white;
+        }
+        </style>
+    </head>
+    <body>
+        <h1 id="main_title">International Freddo Index</h1>
+        <br />   
+        <label for="currency">Base Currency</label>     
+        <select id="currency"></select>
+        <select id="date"></select>
+        <label for="conversion">1 Freddo : </label>
+        <nobr id="conversion"></nobr>
+        <br />
+        <div class="parent"><iframe id="kpi" src="/grap_kpi"></iframe></div>
+    </body>
+    <script src="/index.js"></script>
+</html>

@@ -1,0 +1,28 @@
+h1 {
+    font-family: Calibri;
+    font-weight: bold;
+    font-size: 50px;
+    text-align: center;
+    color: white;
+}
+.parent { 
+    display: flex; 
+    width: 100%;
+}
+iframe{ 
+    justify-content: center;
+    width: 400px;
+    height: 220px;
+    background-color: white;
+    margin-left: calc(50% - 200px);
+    border: none;
+}
+body {
+    background-color: #4b1a73;
+}
+label {
+    font-family: arial;
+    font-size: 13px;
+    font-weight: bold;
+    color: white;
+}
