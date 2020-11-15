@@ -66,6 +66,18 @@ function serverHandler(req, res) {
             return res.end();
         });
     }
+    else if(pasrsedUrl.pathname == "/currency-values.json")
+    {
+        fs.readFile("data/currency-values.json", function(err, data) { // Reads the relevant file
+            if (err) {
+                res.writeHead(404, {'Content-Type': 'text/html'});
+                return res.end("404 Not Found");
+            }
+            res.writeHead(200, {'Content-Type': 'text/json'});
+            res.write(data);
+            return res.end();
+        });
+    }
     else {
         fs.readFile("pages/error.html", function(err, data) { // Reads the relevant file
             if (err) {
