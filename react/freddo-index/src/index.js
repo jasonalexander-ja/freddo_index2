@@ -10,7 +10,7 @@ class KPI extends React.Component {
         }
     }
 
-    makeDataset() {
+    makeDataset(height, width) {
         const changes = this.props.changeObj;
         const dateRange = new Date().getFullYear() - new Date(changes[0].x).getFullYear();
         const startYear = new Date(changes[0].x).getFullYear();
@@ -24,17 +24,56 @@ class KPI extends React.Component {
         }
         let convertedDataset = [];
         psDataset.forEach((val, i) => {
-            console.log(this.props.periodExchangeObj[startYear + i][currency])
+            const rate = this.props.periodExchangeObj[startYear + i][currency]; 
+            if(rate)
+                convertedDataset.push({x: val.x, y: (val.y * rate).toFixed(2)})
+        });
+        let XMax = 0;
+        let YMax = 0;
+        let XMin = 0;
+        let YMin = 0;
+        psDataset.forEach(val => {
+            XMax = XMax < val.x ? val.x : XMax;
+            YMax = YMax < val.y ? val.y : YMax;
+            XMin = XMin > val.x ? val.x : XMin;
+            YMin = YMin > val.y ? val.y : YMin;
+        });
+        const XRange = XMax - XMin;
+        const YRange = YMax - YMin;
+        const Xmultiplier = width / XRange; 
+        const Ymultiplier = height / YRange;
+        const Xoffset = 0 - XMin;
+        const Yoffset = 0 - YMin;
+        convertedDataset = convertedDataset.map(obj => {
+            return {
+                x: (obj.x + Xoffset) * Xmultiplier,
+                y: height - ((obj.y + Yoffset) * Ymultiplier)
+            }
+        });
+        return convertedDataset;
+    }
+
+    componentDidMount() {
+        const kpi = this.refs.canvas;
+        const height = kpi.height;
+        const width = kpi.width;
+        const kpiDataset = this.makeDataset(height, width);
+        const line = kpi.getContext("2d");
+        line.beginPath();
+        line.moveTo(0, kpiDataset[0].y);
+        kpiDataset.forEach(element => {
+            line.lineTo(element.x, element.y);
+            line.stroke();
         });
     }
 
     render() {
-        let kpi = (
-            <canvas className="mainKpi"></canvas>
-        );
         return(
             <div>
-                <canvas className="mainKpi"></canvas>
+                <canvas 
+                    className="mainKpi"
+                    ref="canvas"
+                ></canvas>
             </div>
         )
     }
