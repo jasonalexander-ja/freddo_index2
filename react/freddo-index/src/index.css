@@ -9,7 +9,7 @@ h1 {
     display: flex; 
     width: 100%;
 }
-iframe{ 
+.mainKpi{ 
     justify-content: center;
     width: 400px;
     height: 220px;
@@ -25,4 +25,16 @@ label {
     font-size: 13px;
     font-weight: bold;
     color: white;
+}
+.text {
+    font-family: arial;
+    font-size: 13px;
+    font-weight: bold;
+    color: white;
+}
+.errorText {
+    font-family: arial;
+    font-size: 13px;
+    font-weight: bold;
+    color: yellow;
 }
