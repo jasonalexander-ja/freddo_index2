@@ -57,7 +57,10 @@ class KPI extends React.Component {
         xyCoordinates.forEach(val => {
             polylinePoints += `${val.x},${val.y} `;
         });
+<<<<<<< HEAD
         this.makeLables(2, 2, displayData.xMin, displayData.yMin, displayData.xRange, displayData.yRange, kpiHeight, kpiWidth, offset, 0, 2)
+=======
+>>>>>>> 55c6dd120eadf282a0e46dbc23cf6bfe92ffa6f5
         return(
             <div>
                 <svg 
@@ -211,8 +214,13 @@ class Main extends React.Component {
 
 // General helper functions
 
+<<<<<<< HEAD
 function getDisplayData(Obj, w, h, heightOffset, widthOffset) {
     const height = h - (heightOffset * 2), width = w - (widthOffset * 2);
+=======
+function getDisplayData(Obj, w, h, offset) {
+    const height = h - (offset * 2), width = w - (offset * 2);
+>>>>>>> 55c6dd120eadf282a0e46dbc23cf6bfe92ffa6f5
     let dataObj = Obj.map(val => { return {x: val.x, y: parseFloat(val.y)} });
     let xMin = dataObj[0].x, xMax = 0;
     let yMin = dataObj[0].y, yMax = 0;
@@ -228,8 +236,13 @@ function getDisplayData(Obj, w, h, heightOffset, widthOffset) {
      const yMultiplier = height / yRange, yOffset = 0 - yMin;
      let convertedArr = dataObj.map(val => {
          return {
+<<<<<<< HEAD
             x: Math.floor((val.x + xOffset) * xMultiplier) + widthOffset,
             y: height - Math.floor((val.y + yOffset) * yMultiplier) + heightOffset
+=======
+            x: Math.floor((val.x + xOffset) * xMultiplier) + offset,
+            y: height - Math.floor((val.y + yOffset) * yMultiplier) + offset
+>>>>>>> 55c6dd120eadf282a0e46dbc23cf6bfe92ffa6f5
         }
      });
      return  {
