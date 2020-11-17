@@ -32,17 +32,17 @@ class KPI extends React.Component {
         return convertedDataset;
     }
 
-    makeLables(xNumber, yNumber, xMin, yMin, xRange, yRange, height, width, offset, xDec, yDec) {
+    makeLables(xMax, yMax, xMin, yMin, xRange, yRange, height, width, offset, xDec, yDec) {
         const useableWidth = width - (2 * offset), useableHeight = height - (2* offset);
-        const xIncrement = xRange / xNumber, yIncrement = yRange / yNumber;
-        const xPosIncrement = useableWidth / xNumber, yPosIncrement = useableHeight / yNumber;
+        const xIncrement = xRange / xMax, yIncrement = yRange / yMax;
+        const xPosIncrement = useableWidth / xMax, yPosIncrement = useableHeight / yMax;
         let xLabels = [], yLables = [], xLength = 0, yLength = 0;
-        for(let i = 0; i <= xNumber; i++) {
+        for(let i = 0; i <= xMax; i++) {
             let xPos = offset + i * xPosIncrement;
             let text = parseFloat((xMin + i * xIncrement).toFixed(xDec)).toString();
             xLength = xLength < text.length ? text.length : xLength;
         }
-        for(let i = 0; i <= yNumber; i++) {
+        for(let i = 0; i <= yMax; i++) {
             let yPos = offset + i * yPosIncrement;
             let text = parseFloat((yMin + i * yIncrement).toFixed(yDec)).toString();
             yLength = yLength < text.length ? text.length : yLength;
