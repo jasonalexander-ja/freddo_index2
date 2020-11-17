@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import TestComponent  from './test_modul.js'
+import { Graph } from './test_modul.js'
 
 class KPI extends React.Component {
     constructor(props) {
@@ -52,7 +52,7 @@ class KPI extends React.Component {
     render() {
         const kpiHeight = 220, kpiWidth = 400, offset = 35;
         const displayData = getDisplayData(this.makeDataset(), kpiWidth, kpiHeight, offset, offset);
-
+        console.log(this.makeDataset());
         const xyCoordinates = displayData.convertedArr;
         let polylinePoints =  "";
         xyCoordinates.forEach(val => {
@@ -166,6 +166,26 @@ class Main extends React.Component {
             }); 
         }
     }
+    getGraphData() {
+        const changes = this.props.changeObj;
+        const dateRange = new Date().getFullYear() - new Date(changes[0].x).getFullYear();
+        const startYear = new Date(changes[0].x).getFullYear();
+        const currency = this.state.currency;
+        let psDataset = [];
+        for(let i = 0; i <= dateRange; i++) {
+            psDataset.push({
+                x: new Date(changes[0].x).getFullYear() + i, 
+                y: getPriceOnYear(changes, startYear + i)
+            });
+        }
+        let convertedDataset = [];
+        psDataset.forEach((val, i) => {
+            const rate = this.props.periodExchangeObj[startYear + i][currency]; 
+            if(rate)
+                convertedDataset.push({x: val.x, y: (val.y * rate).toFixed(2)});
+        });
+        return convertedDataset;
+    }
     render() {
         let yearOptions = generateDateOptions(this.props.changeObj, this.props.periodExchangeObj, this.state.currency);
         let currencyOptions = this.props.currencyOptions.map(val => {
@@ -178,6 +198,7 @@ class Main extends React.Component {
                 >{val.value}</option>
             )
         });
+        const graphData = this.getGraphData();
         return (
             <div>
                 <h1 className="main_title">International Freddo Index</h1>
@@ -204,7 +225,12 @@ class Main extends React.Component {
                     currency={this.state.currency}
                     periodExchangeObj={this.props.periodExchangeObj}
                 />
-                <TestComponent />
+                <Graph 
+                    className="mainKpi" 
+                    graphWidth={400}
+                    graphHeight={220}
+                    graphData={graphData}
+                />
             </div>
         )
     }
@@ -313,7 +339,6 @@ async function main() {
     let currencyOptions = await getCurrencyOptions();
     let initConversionObj = await getCurrentRates();
     let periodExchangeRates = await getPeriodExchangeRates(new Date(changeObj[0].x).getFullYear(), new Date().getFullYear());
-    console.log(TestComponent);
     ReactDOM.render(
         <Main
             changeObj={changeObj}
