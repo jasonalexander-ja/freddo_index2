@@ -10,7 +10,7 @@ class KPI extends React.Component {
         }
     }
 
-    makeDataset(height, width) {
+    makeDataset() {
         const changes = this.props.changeObj;
         const dateRange = new Date().getFullYear() - new Date(changes[0].x).getFullYear();
         const startYear = new Date(changes[0].x).getFullYear();
@@ -28,52 +28,78 @@ class KPI extends React.Component {
             if(rate)
                 convertedDataset.push({x: val.x, y: (val.y * rate).toFixed(2)})
         });
-        let XMax = 0;
-        let YMax = 0;
-        let XMin = 0;
-        let YMin = 0;
-        psDataset.forEach(val => {
-            XMax = XMax < val.x ? val.x : XMax;
-            YMax = YMax < val.y ? val.y : YMax;
-            XMin = XMin > val.x ? val.x : XMin;
-            YMin = YMin > val.y ? val.y : YMin;
-        });
-        const XRange = XMax - XMin;
-        const YRange = YMax - YMin;
-        const Xmultiplier = width / XRange; 
-        const Ymultiplier = height / YRange;
-        const Xoffset = 0 - XMin;
-        const Yoffset = 0 - YMin;
-        convertedDataset = convertedDataset.map(obj => {
-            return {
-                x: (obj.x + Xoffset) * Xmultiplier,
-                y: height - ((obj.y + Yoffset) * Ymultiplier)
-            }
-        });
         return convertedDataset;
     }
 
-    componentDidMount() {
-        const kpi = this.refs.canvas;
-        const height = kpi.height;
-        const width = kpi.width;
-        const kpiDataset = this.makeDataset(height, width);
-        const line = kpi.getContext("2d");
-        line.beginPath();
-        line.moveTo(0, kpiDataset[0].y);
-        kpiDataset.forEach(element => {
-            line.lineTo(element.x, element.y);
-            line.stroke();
-        });
+    makeLables(xNumber, yNumber, xMin, yMin, xRange, yRange, height, width, offset, xDec, yDec) {
+        const useableWidth = width - (2 * offset), useableHeight = height - (2* offset);
+        const xIncrement = xRange / xNumber, yIncrement = yRange / yNumber;
+        const xPosIncrement = useableWidth / xNumber, yPosIncrement = useableHeight / yNumber;
+        let xLabels = [], yLables = [], xLength = 0, yLength = 0;
+        for(let i = 0; i <= xNumber; i++) {
+            let xPos = offset + i * xPosIncrement;
+            let text = parseFloat((xMin + i * xIncrement).toFixed(xDec)).toString();
+            xLength = xLength < text.length ? text.length : xLength;
+        }
+        for(let i = 0; i <= yNumber; i++) {
+            let yPos = offset + i * yPosIncrement;
+            let text = parseFloat((yMin + i * yIncrement).toFixed(yDec)).toString();
+            yLength = yLength < text.length ? text.length : yLength;
+        }
     }
 
     render() {
+        const kpiHeight = 220, kpiWidth = 400, offset = 35;
+        const displayData = getDisplayData(this.makeDataset(), kpiWidth, kpiHeight, offset, offset);
+
+        const xyCoordinates = displayData.convertedArr;
+        let polylinePoints =  "";
+        xyCoordinates.forEach(val => {
+            polylinePoints += `${val.x},${val.y} `;
+        });
+        this.makeLables(2, 2, displayData.xMin, displayData.yMin, displayData.xRange, displayData.yRange, kpiHeight, kpiWidth, offset, 0, 2)
         return(
             <div>
-                <canvas 
+                <svg 
                     className="mainKpi"
-                    ref="canvas"
-                ></canvas>
+                    height={`${kpiHeight}px`} 
+                    width={`${kpiWidth}px`}
+                >
+                    <polyline 
+                        points={polylinePoints} 
+                        className="line"
+                    />
+                    <text 
+                        x={kpiWidth / 2} 
+                        y={kpiHeight - 5} 
+                        fontSize="15px"
+                    fontFamily="arial">{displayData.xMin + Math.floor(displayData.xRange/2)}</text>
+                    <text 
+                        x={kpiWidth - offset} 
+                        y={kpiHeight - 5} 
+                        fontSize="15px"
+                    fontFamily="arial">{displayData.xMax}</text>
+                    <text 
+                        x={offset} 
+                        y={kpiHeight - 5} 
+                        fontSize="15px"
+                    fontFamily="arial">{displayData.xMin}</text>
+                    <text 
+                        x={5} 
+                        y={kpiHeight - offset} 
+                        fontSize="15px"
+                    fontFamily="arial">{displayData.yMin}</text>
+                    <text 
+                        x={5} 
+                        y={kpiHeight - (kpiHeight/2)} 
+                        fontSize="15px"
+                    fontFamily="arial">{parseFloat((displayData.yMin + (displayData.yRange/2)).toFixed(2))}</text>
+                    <text 
+                        x={5} 
+                        y={offset} 
+                        fontSize="15px"
+                    fontFamily="arial">{displayData.yMax}</text>
+                </svg>
             </div>
         )
     }
@@ -141,7 +167,7 @@ class Main extends React.Component {
         }
     }
     render() {
-        let yearOptions = generateDateOptions(this.props.changeObj);
+        let yearOptions = generateDateOptions(this.props.changeObj, this.props.periodExchangeObj, this.state.currency);
         let currencyOptions = this.props.currencyOptions.map(val => {
             let hidden = !(val.code in this.state.exchangeRates);
             return(
@@ -183,11 +209,45 @@ class Main extends React.Component {
     }
 }
 
-function generateDateOptions(list) {
+// General helper functions
+
+function getDisplayData(Obj, w, h, heightOffset, widthOffset) {
+    const height = h - (heightOffset * 2), width = w - (widthOffset * 2);
+    let dataObj = Obj.map(val => { return {x: val.x, y: parseFloat(val.y)} });
+    let xMin = dataObj[0].x, xMax = 0;
+    let yMin = dataObj[0].y, yMax = 0;
+    dataObj.forEach(val => { 
+        xMin = xMin > val.x ? val.x : xMin;
+        xMax = xMax < val.x ? val.x : xMax;
+        yMin = yMin > val.y ? val.y : yMin;
+        yMax = yMax < val.y ? val.y : yMax;
+     });
+     const xRange = xMax - xMin;
+     const yRange = (yMax - yMin).toFixed(2);
+     const xMultiplier = width  / xRange, xOffset = 0 - xMin;
+     const yMultiplier = height / yRange, yOffset = 0 - yMin;
+     let convertedArr = dataObj.map(val => {
+         return {
+            x: Math.floor((val.x + xOffset) * xMultiplier) + widthOffset,
+            y: height - Math.floor((val.y + yOffset) * yMultiplier) + heightOffset
+        }
+     });
+     return  {
+        xMin: xMin,
+        yMin: yMin,
+        xMax: xMax,
+        yMax: yMax,
+        xRange: xRange,
+        yRange: yRange,
+        convertedArr: convertedArr,
+    };
+}
+function generateDateOptions(list, periodExchangeObj, currency) {
     let optionList = [];
     let years = list.map(val => new Date(val.x).getFullYear());
     for(let i = years[0]; i <= new Date().getFullYear(); i++) {
-        optionList.push(<option key={i} value={i}>{i}</option>);
+        if(currency in periodExchangeObj[i])
+            optionList.push(<option key={i} value={i}>{i}</option>);
     }
     return optionList.reverse();
 }
@@ -205,6 +265,9 @@ function getPriceOnYear(data, date) {
 async function fetchJSON(uri) {
     return fetch(uri).then(res => res.json());
 }
+
+
+// Code to run to get static reasources prior to app start
 
 async function getChangeObj() {
     return fetchJSON("http://localhost:80/change-points.json")
@@ -234,7 +297,6 @@ async function getCurrentRates() {
 async function getPeriodExchangeRates(from, until) {
     let retObj = {};
     for(let i = from; i <= until; i++) {
-        let obj = {};
         let json = await fetchJSON(`https://api.exchangeratesapi.io/${i}-01-01?base=GBP`)
             .then(data => data.rates)
             .catch(err => { 
