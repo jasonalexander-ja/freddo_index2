@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import { Graph } from './graphing.js'
+import { Graph, graphData } from './graphing.js'
 
 class Main extends React.Component {
     constructor(props) {
@@ -102,23 +102,34 @@ class Main extends React.Component {
             <div>
                 <h1 className="main_title">International Freddo Index</h1>
                 <br />
-                <label>Year: </label>
-                <select 
-                    id="year" 
-                    value={this.state.year}
-                    onChange={() => { this.updateYear(document.getElementById("year").value); }}
-                >{yearOptions}
-                </select>&nbsp;&nbsp;
-                <label>Currency: </label>
-                <select
-                    id="currency"
-                    value={this.state.currency}
-                    onChange={() => {
-                        this.updateCurrency(document.getElementById("currency").value);
-                    }}
-                >{currencyOptions}</select>&nbsp;&nbsp;
-                <nobr className="text">{(this.state.costPs * this.state.exchangeRate).toFixed(2)}</nobr>&nbsp;&nbsp;
-                <nobr className="errorText">{this.state.errorMsg}</nobr>
+                <div className="inputLine">
+                    <div className = "inputGroup">
+                        <label>Year: </label>
+                        <select 
+                            id="year" 
+                            value={this.state.year}
+                            onChange={() => { this.updateYear(document.getElementById("year").value); }}
+                        >{yearOptions}
+                        </select>
+                    </div>
+                    &nbsp;&nbsp;
+                    <div className = "inputGroup">
+                        <label>Currency: </label>
+                        <select
+                            id="currency"
+                            value={this.state.currency}
+                            onChange={() => {
+                                this.updateCurrency(document.getElementById("currency").value);
+                            }}
+                        >{currencyOptions}</select>
+                    </div>
+                    <br />
+                    <nobr className="text">
+                        1 Freddo : 
+                        {` ${(this.state.costPs * this.state.exchangeRate).toFixed(2)} ${this.state.currency}`}
+                    </nobr>&nbsp;&nbsp;
+                    <nobr className="errorText">{this.state.errorMsg}</nobr>
+                </div>
                 <Graph 
                     className="mainKpi" 
                     graphWidth={400}

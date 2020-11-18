@@ -8,19 +8,63 @@ function Lables(xyObjStats, xTextOffset, yTextOffset, className, xNum, yNum, wid
     for(let i = 0; i <= xNum; i++) {
         let xPos = i * xPosIncrement;
         let text = parseFloat((xyObjStats.xMin + i * xIncrement).toFixed(0)).toString();
-        labels.push(<text x={xOffset + xPos} y={height - xTextOffset} className={className} >{text}</text>);
+        labels.push(<text x={xOffset + xPos} y={height - xTextOffset} className={className} key={`x${i}`}>{text}</text>);
     }
     for(let i = 0; i <= yNum; i++) {
         let yPos = i * yPosIncrement;
         let text = parseFloat((xyObjStats.yMin + i * yIncrement).toFixed(2)).toString();
-        labels.push(<text x={yTextOffset} y={height - yPos - yOffset} className={className} >{text}</text>);
+        labels.push(<text x={yTextOffset} y={height - yPos - yOffset} className={className} key={`y${i}`}>{text}</text>);
     }
     return labels;
+}
+
+export class GraphSettings {
+    constructor() {
+        this.graphHeight = 220;
+        this.graphWidth = 400;
+        this.textClassName = "";
+        this.lineClassName = "";
+        this.xTextOffset = 2;
+        this.yTextOffset = 2;
+        this.xPrecision = 2;
+        this.yPrecision = 2;
+        this.xLabels = 2;
+        this.yLabels = 2;
+        this.xOffset = 35;
+        this.yOffset = 35;
+    }
+    setTextClass(className) {
+        this.textClassName = className ? className : this.textClassName;
+    }
+    setLineClassName(className) {
+        this.lineClassName = className ? className : this.lineClassName;
+    }
+    setSize(height, width) {
+        this.graphHeight = height ? height : this.graphHeight;
+        this.graphWidth = width ? width : this.graphWidth;
+    }
+    setTextOffset(x, y) {
+        this.xTextOffset = x ? x : this.xTextOffset;
+        this.yTextOffset = y ? y : this.yTextOffset;
+    }
+    setLabels(x, y) {
+        this.xLabels = x ? x : this.xLabels;
+        this.yLabels = y ? y : this.yLabels;
+    }
+    setPrecision(x, y) {
+        this.xPrecision = x ? x : this.xPrecision;
+        this.yPrecision = y ? y : this.yPrecision;
+    }
+    setOffsets(x, y) {
+        this.xOffset = x ? x : this.xOffset;
+        this.yOffset = y ? y : this.yOffset;
+    }
 }
 
 export class Graph extends React.Component {
     constructor(props) {
         super(props)
+        console.log('new Graph()');
         this.state = {
             graphHeight: 
                 this.props.graphHeight ? this.props.graphHeight : 220,
@@ -140,4 +184,9 @@ function getDisplayData(xyObjArr, xyObjstats, w, h, xNegOffset, yNegOffset) {
      return convertedArr;
 }
 
-export default { Graph };
+const graph = {
+    Graph,
+    GraphSettings
+}
+
+export default graph;

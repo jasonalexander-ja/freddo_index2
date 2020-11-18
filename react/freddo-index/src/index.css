@@ -1,7 +1,10 @@
+* {
+    box-sizing: border-box;
+  }
 h1 {
     font-family: Calibri;
     font-weight: bold;
-    font-size: 50px;
+    font-size: 70px;
     text-align: center;
     color: white;
 }
@@ -12,7 +15,7 @@ h1 {
 .mainKpi{ 
     justify-content: center;
     background-color: white;
-    margin-left: calc(50% - 200px);
+    text-align: center;
     border: none;
 }
 .line {
@@ -52,3 +55,12 @@ label {
     font-weight: bold;
     color: yellow;
 }
+
+.inputLine {
+    align-self: center;
+    margin-bottom: 25px;
+}
+.inputGroup {
+    float: left;
+}
+
