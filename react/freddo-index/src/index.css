@@ -41,6 +41,11 @@ label {
     font-weight: bold;
     color: black;
 }
+.kpiText {
+    font-family: arial;
+    font-size: 15px;
+    color: black;
+}
 .errorText {
     font-family: arial;
     font-size: 13px;
