@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 // import Paper from '@material-ui/core/Paper'
 import './index.css';
-import { Graph, graphData } from './graphing.js'
-
+import { Graph } from './graphing.js'
+let APIOrigin = "/";
 
 class Main extends React.Component {
     constructor(props) {
@@ -178,7 +178,7 @@ async function fetchJSON(uri) {
 // Code to run to get static reasources prior to app start
 
 async function getChangeObj() {
-    return fetchJSON("http://localhost:80/change-points.json")
+    return fetchJSON(`${APIOrigin}change-points.json`)
         .then(data => data.changePoints)
         .catch(e => { 
             console.log("Error getting change data."); 
@@ -187,7 +187,7 @@ async function getChangeObj() {
 }
 
 async function getCurrencyOptions() {
-    return fetchJSON("http://localhost:80/currency-values.json")
+    return fetchJSON(`${APIOrigin}currency-values.json`)
         .then(data => data.options)
         .catch(e => { 
             console.log("Failed to get currency options."); 
@@ -216,6 +216,7 @@ async function getPeriodExchangeRates(from, until) {
     return retObj;
 }
 async function main() {
+    APIOrigin = await fetchJSON('/data-origin.json').then(res => res.origin).catch(e => '/');
     let changeObj = await getChangeObj();
     let currencyOptions = await getCurrencyOptions();
     let initConversionObj = await getCurrentRates();

@@ -19,14 +19,14 @@
             "path": "/manifest.json",
             "class": "UIComponent"
         },
-        "/static/js/main.7a86514f.chunk.js": {
+        "/static/js/main.878561fd.chunk.js": {
             "MIME": "text/javascript",
-            "path": "/static/js/main.7a86514f.chunk.js",
+            "path": "/static/js/main.878561fd.chunk.js",
             "class": "UIComponent"
         },
-        "/static/js/main.7a86514f.chunk.js.map": {
+        "/static/js/main.878561fd.chunk.js.map": {
             "MIME": "application/json",
-            "path": "/static/js/main.7a86514f.chunk.js.map",
+            "path": "/static/js/main.878561fd.chunk.js.map",
             "class": "UIComponent"
         },
         "/static/js/2.4b1e0d2f.chunk.js": {
@@ -63,6 +63,11 @@
             "MIME": "text/json",
             "path": "/currency-values.json",
             "class": "data"
-        }
+        },
+        "/data-origin.json": {
+            "MIME": "text/json",
+            "path": "/data-origin.json",
+            "class": "data"
+        }        
     }
 }
