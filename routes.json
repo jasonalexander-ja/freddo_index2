@@ -1,7 +1,7 @@
 {
     "classes": {
         "data": "./data",
-        "UIComponent": "C:/Dev/NodeJS/freddo_index2/react/freddo-index/build"
+        "UIComponent": "./react/freddo-index/build"
     },
     "routes": {
         "/": {
@@ -19,14 +19,14 @@
             "path": "/manifest.json",
             "class": "UIComponent"
         },
-        "/static/js/main.878561fd.chunk.js": {
+        "/static/js/main.964aa23f.chunk.js": {
             "MIME": "text/javascript",
-            "path": "/static/js/main.878561fd.chunk.js",
+            "path": "/static/js/main.964aa23f.chunk.js",
             "class": "UIComponent"
         },
-        "/static/js/main.878561fd.chunk.js.map": {
+        "/static/js/main.964aa23f.chunk.js.map": {
             "MIME": "application/json",
-            "path": "/static/js/main.878561fd.chunk.js.map",
+            "path": "/static/js/main.964aa23f.chunk.js.map",
             "class": "UIComponent"
         },
         "/static/js/2.4b1e0d2f.chunk.js": {
