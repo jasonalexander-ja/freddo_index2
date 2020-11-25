@@ -2,91 +2,33 @@ var fs = require("fs");
 var url = require("url");
 var http = require("http");
 
-http.createServer(function (req, res) { serverHandler(req, res); }).listen(80); //the server object listens on port 8080
+const build = "C:/Dev/NodeJS/freddo_index2/react/freddo-index/build";
 
-function serverHandler(req, res) {
-    var pasrsedUrl = url.parse(req.url, true); 
-    if(pasrsedUrl.pathname == "/")
-    {
-        fs.readFile("pages/index.html", function(err, data) { // Reads the relevant file
-            if (err) {
-                res.writeHead(404, {'Content-Type': 'text/html'});
-                return res.end("404 Not Found");
+const config = JSON.parse(fs.readFileSync("routes.json"));
+const routes = config.routes;
+const classes = config.classes;
+
+http.createServer(function (req, res) { testServerHandler(req, res); }).listen(80); //the server object listens on port 8080
+
+function testServerHandler(req, res) {
+    const pasrsedUrl = url.parse(req.url, true);
+    const reasource = routes[pasrsedUrl.path];
+    if(reasource) {
+        fs.readFile(classes[reasource.class] + reasource.path, (err, data) => {
+            if(!err) {
+                res.writeHead(200, {'Content-Type': reasource.MIME});
+                res.write(data);
             }
-            res.writeHead(200, {'Content-Type': 'text/html'});
-            res.write(data);
-            return res.end();
-        });
-    }
-    else if(pasrsedUrl.pathname == "/favicon.png")
-    {
-        fs.readFile("Images/favicon.png", function(err, data) { // Reads the relevant file
-            if (err) {
-                res.writeHead(404, {'Content-Type': 'text/html'});
-                return res.end("404 Not Found");
+            else {
+                res.writeHead(500, {'Content-Type': 'text/html'});
+                res.write('<!DOCTYPE html><html><body>Could not load resource.</body></html>');
             }
-            res.writeHead(200, {'Content-Type': 'image/x-icon'});
-            res.write(data);
-            return res.end();
-        });
-    }
-    else if(pasrsedUrl.pathname == "/favicon.ico")
-    {
-        fs.readFile("Images/favicon.ico", function(err, data) { // Reads the relevant file
-            if (err) {
-                res.writeHead(404, {'Content-Type': 'text/html'});
-                return res.end("404 Not Found");
-            }
-            res.writeHead(200, {'Content-Type': 'image/x-icon'});
-            res.write(data);
-            return res.end();
-        });
-    }
-    else if(pasrsedUrl.pathname == "/index.js")
-    {
-        fs.readFile("scripts/index.js", function(err, data) { // Reads the relevant file
-            if (err) {
-                res.writeHead(404, {'Content-Type': 'text/html'});
-                return res.end("404 Not Found");
-            }
-            res.writeHead(200, {'Content-Type': 'text/javascript'});
-            res.write(data);
-            return res.end();
-        });
-    }
-    else if(pasrsedUrl.pathname == "/change-points.json")
-    {
-        fs.readFile("data/change-points.json", function(err, data) { // Reads the relevant file
-            if (err) {
-                res.writeHead(404, {'Content-Type': 'text/html'});
-                return res.end("404 Not Found");
-            }
-            res.writeHead(200, {'Content-Type': 'text/json'});
-            res.write(data);
-            return res.end();
-        });
-    }
-    else if(pasrsedUrl.pathname == "/currency-values.json")
-    {
-        fs.readFile("data/currency-values.json", function(err, data) { // Reads the relevant file
-            if (err) {
-                res.writeHead(404, {'Content-Type': 'text/html'});
-                return res.end("404 Not Found");
-            }
-            res.writeHead(200, {'Content-Type': 'text/json'});
-            res.write(data);
             return res.end();
         });
     }
     else {
-        fs.readFile("pages/error.html", function(err, data) { // Reads the relevant file
-            if (err) {
-                res.writeHead(404, {'Content-Type': 'text/html'});
-                return res.end("404 Not Found");
-            }
-            res.writeHead(200, {'Content-Type': 'text/html'});
-            res.write(data);
-            return res.end();
-        });
+        res.writeHead(404, {'Content-Type': 'text/html'});
+        res.write("<!DOCTYPE html><html><body>Error.</body></html>");
+        return res.end();
     }
 }

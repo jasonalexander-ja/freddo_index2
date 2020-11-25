@@ -1,7 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+// import Paper from '@material-ui/core/Paper'
 import './index.css';
 import { Graph, graphData } from './graphing.js'
+
 
 class Main extends React.Component {
     constructor(props) {
@@ -99,7 +101,7 @@ class Main extends React.Component {
         });
         const graphData = this.getGraphData();
         return (
-            <div>
+            <div className="mainBody">
                 <h1 className="main_title">International Freddo Index</h1>
                 <br />
                 <div className="inputLine">
@@ -123,23 +125,24 @@ class Main extends React.Component {
                             }}
                         >{currencyOptions}</select>
                     </div>
-                    <br />
                     <nobr className="text">
                         1 Freddo : 
                         {` ${(this.state.costPs * this.state.exchangeRate).toFixed(2)} ${this.state.currency}`}
                     </nobr>&nbsp;&nbsp;
                     <nobr className="errorText">{this.state.errorMsg}</nobr>
+                </div> <br />
+                <div className="kpiHolder">
+                    <Graph 
+                        className="mainKpi" 
+                        graphWidth={400}
+                        graphHeight={220}
+                        graphData={graphData}
+                        textClassName="kpiText"
+                        xTextOffset={5}
+                        yTextOffset={5}
+                        lineClassName="line"
+                    />
                 </div>
-                <Graph 
-                    className="mainKpi" 
-                    graphWidth={400}
-                    graphHeight={220}
-                    graphData={graphData}
-                    textClassName="kpiText"
-                    xTextOffset={5}
-                    yTextOffset={5}
-                    lineClassName="line"
-                />
             </div>
         )
     }

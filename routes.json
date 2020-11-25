@@ -1,0 +1,68 @@
+{
+    "classes": {
+        "data": "./data",
+        "UIComponent": "C:/Dev/NodeJS/freddo_index2/react/freddo-index/build"
+    },
+    "routes": {
+        "/": {
+            "MIME": "text/html",
+            "path": "/index.html",
+            "class": "UIComponent"
+        },
+        "/favicon.ico": {
+            "MIME": "image/x-icon",
+            "path": "/favicon.ico",
+            "class": "UIComponent"
+        },
+        "/manifest.json": {
+            "MIME": "text/json",
+            "path": "/manifest.json",
+            "class": "UIComponent"
+        },
+        "/static/js/main.7a86514f.chunk.js": {
+            "MIME": "text/javascript",
+            "path": "/static/js/main.7a86514f.chunk.js",
+            "class": "UIComponent"
+        },
+        "/static/js/main.7a86514f.chunk.js.map": {
+            "MIME": "application/json",
+            "path": "/static/js/main.7a86514f.chunk.js.map",
+            "class": "UIComponent"
+        },
+        "/static/js/2.4b1e0d2f.chunk.js": {
+            "MIME": "text/javascript",
+            "path": "/static/js/2.4b1e0d2f.chunk.js",
+            "class": "UIComponent"
+        },
+        "/static/js/2.4b1e0d2f.chunk.js.map": {
+            "MIME": "application/json",
+            "path": "/static/js/2.4b1e0d2f.chunk.js.map",
+            "class": "UIComponent"
+        },
+        "/static/css/main.10e54483.chunk.css": {
+            "MIME": "text/css",
+            "path": "/static/css/main.10e54483.chunk.css",
+            "class": "UIComponent"
+        },
+        "/static/css/main.10e54483.chunk.css.map": {
+            "MIME": "application/json",
+            "path": "/static/css/main.10e54483.chunk.css.map",
+            "class": "UIComponent"
+        },
+        "/logo192.png": {
+            "MIME": "application/json",
+            "path": "/logo192.png",
+            "class": "UIComponent"
+        },
+        "/change-points.json": {
+            "MIME": "text/json",
+            "path": "/change-points.json",
+            "class": "data"
+        },
+        "/currency-values.json": {
+            "MIME": "text/json",
+            "path": "/currency-values.json",
+            "class": "data"
+        }
+    }
+}
