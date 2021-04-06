@@ -57,7 +57,6 @@ class Main extends React.Component {
         else {
             let curr = "";
             this.props.currencyOptions.forEach(obj => { if(obj.code === val) curr = obj.value; });
-            console.log(curr);
             this.setState({
                 error: true,
                 errorMsg: `No data for ${curr} for ${this.state.year}.`,
@@ -154,8 +153,9 @@ function generateDateOptions(list, periodExchangeObj, currency) {
     let optionList = [];
     let years = list.map(val => new Date(val.x).getFullYear());
     for(let i = years[0]; i <= new Date().getFullYear(); i++) {
-        if(currency in periodExchangeObj[i])
-            optionList.push(<option key={i} value={i}>{i}</option>);
+        if(periodExchangeObj[i])
+            if(currency in periodExchangeObj[i])
+                optionList.push(<option key={i} value={i}>{i}</option>);
     }
     return optionList.reverse();
 }
@@ -196,7 +196,7 @@ async function getCurrencyOptions() {
 }
 async function getCurrentRates() {
     return fetchJSON(`https://api.exchangeratesapi.io/${new Date().getFullYear()}-01-01?base=GBP`)
-        .then(data => data.rates)
+        .then(data => data.success ? data.rates : {"GBP": 1})
         .catch(e => { 
             console.log("Failed to get initial conversion object."); 
             return {"GBP": 1}
@@ -206,12 +206,15 @@ async function getPeriodExchangeRates(from, until) {
     let retObj = {};
     for(let i = from; i <= until; i++) {
         let json = await fetchJSON(`https://api.exchangeratesapi.io/${i}-01-01?base=GBP`)
-            .then(data => data.rates)
+            .then(data => data)
             .catch(err => { 
                 console.log(`Error getting exchange rates for period ${i}.`);
-                return {"GPB": 1} 
+                return {"rates": { "GPB": 1 }} 
             });
-        retObj[i.toString()] = json;
+        if(json.success)
+            retObj[i.toString()] = json.rates;
+        else 
+            retObj[i.toString()] = {"GBP": 1};
     }
     return retObj;
 }
